@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>We ❤️ Doc - Highlighter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#f1f3f6;
+      margin:0;
+      padding:0;
+    }
+    h1 {
+      color:#d62828;
+      text-align:center;
+      padding:30px 10px 10px;
+      font-size:28px;
+    }
+    .container {
+      max-width:700px;
+      margin:40px auto;
+      background:#fff;
+      padding:40px;
+      border-radius:16px;
+      text-align:center;
+      box-shadow:0 8px 24px rgba(0,0,0,0.1);
+    }
+    .upload-btn {
+      display:inline-block;
+      background:#d62828;
+      color:#fff;
+      font-weight:bold;
+      font-size:18px;
+      padding:18px 40px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:0.2s ease;
+      margin-bottom:20px;
+    }
+    .upload-btn:hover {
+      background:#b71c1c;
+    }
+    input[type=file] {
+      display:none;
+    }
+    .radio-group {
+      margin:20px 0;
+      display:flex;
+      justify-content:center;
+      gap:30px;
+    }
+    .radio-option {
+      font-size:16px;
+    }
+    .process-btn {
+      background:#1d3557;
+      color:#fff;
+      border:none;
+      padding:15px 40px;
+      font-size:18px;
+      font-weight:bold;
+      border-radius:8px;
+      cursor:pointer;
+      transition:0.2s;
+    }
+    .process-btn:hover {
+      background:#14213d;
+    }
+  </style>
+</head>
+<body>
+  <h1>We ❤️ Doc - PDF Highlighter</h1>
+  <div class="container">
+    <form action="/process" method="post" enctype="multipart/form-data">
+
+      <!-- PDF Upload -->
+      <label for="pdf_file" class="upload-btn">📄 Select PDF file</label>
+      <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf" required>
+
+      <br>
+
+      <!-- Excel Upload -->
+      <label for="excel_file" class="upload-btn" style="background:#e76f51;">📊 Select Excel file</label>
+      <input type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls" required>
+
+      <!-- Mode Selection -->
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="mode" value="pf" checked> PF (Cell only)
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="mode" value="esic"> ESIC (Full row)
+        </label>
+      </div>
+
+      <!-- Process Button -->
+      <button type="submit" class="process-btn">🚀 Process & Highlight</button>
+    </form>
+  </div>
+</body>
+</html>

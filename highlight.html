@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We❤️ Doc - PDF Highlighter</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(to right, #ff4b2b, #ff416c);
+      --secondary-color: #4ecdc4;
+      --dark-color: #2f3640;
+      --light-color: #f5f6fa;
+      --gray-color: #dcdde1;
+      --success-color: #44bd32;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header Styles */
+    header {
+      background: var(--primary-gradient);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo span {
+      color: #ffeb3b;
+      margin: 0 5px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+
+    nav ul li {
+      position: relative;
+      margin-left: 20px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 4px;
+      transition: background 0.3s;
+      display: block;
+    }
+
+    nav ul li a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main Content */
+    .main-content {
+      min-height: calc(100vh - 200px);
+      padding: 40px 0;
+    }
+    
+    h1 {
+      color: #d62828;
+      text-align: center;
+      padding: 30px 10px 10px;
+      font-size: 32px;
+    }
+    
+    .form-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    
+    .upload-btn {
+      display: inline-block;
+      background: #d62828;
+      color: #fff;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 18px 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s ease;
+      margin-bottom: 20px;
+    }
+    
+    .upload-btn:hover {
+      background: #b71c1c;
+    }
+    
+    input[type=file] {
+      display: none;
+    }
+    
+    .radio-group {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+    
+    .radio-option {
+      font-size: 16px;
+    }
+    
+    .process-btn {
+      background: #1d3557;
+      color: #fff;
+      border: none;
+      padding: 15px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 20px;
+    }
+    
+    .process-btn:hover {
+      background: #14213d;
+    }
+    
+    .process-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    /* Status Display */
+    .status-container {
+      margin-top: 30px;
+      text-align: left;
+    }
+    
+    .file-status {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border-left: 4px solid #6c757d;
+    }
+    
+    .file-status.success {
+      border-left-color: var(--success-color);
+      background: #f0fff4;
+    }
+    
+    .file-status.error {
+      border-left-color: #dc3545;
+      background: #fff5f5;
+    }
+    
+    .file-status.processing {
+      border-left-color: #ffc107;
+      background: #fffef0;
+    }
+    
+    .status-icon {
+      margin-right: 10px;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background: #e9ecef;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    
+    .progress {
+      height: 100%;
+      background: var(--primary-gradient);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    /* Result Display */
+    .result-container {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      text-align: left;
+      display: none;
+    }
+    
+    .result-header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #1d3557;
+    }
+    
+    .download-btn {
+      display: inline-block;
+      background: var(--success-color);
+      color: white;
+      padding: 12px 25px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 15px;
+      transition: background 0.2s;
+    }
+    
+    .download-btn:hover {
+      background: #389e2d;
+    }
+    
+    /* Footer */
+    footer {
+      background: var(--dark-color);
+      color: white;
+      padding: 30px 0 15px;
+      margin-top: 50px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .footer-section h3 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-section h3:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary-gradient);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: var(--gray-color);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+      }
+      
+      .logo {
+        margin-bottom: 15px;
+      }
+      
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      nav ul li {
+        margin: 5px;
+      }
+      
+      .form-container {
+        padding: 25px;
+      }
+      
+      .upload-btn {
+        padding: 15px 30px;
+        font-size: 16px;
+      }
+      
+      .radio-group {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container header-content">
+      <div class="logo">
+        <a href="/" style="color: white; text-decoration: none;">We <span>❤️</span> Doc</a>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/highlight" style="background: rgba(255, 255, 255, 0.2);">PDF Highlighter</a></li>
+          <li><a href="/all-tools">All Tools</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      <h1>We ❤️ Doc - PDF Highlighter</h1>
+      
+      <div class="form-container">
+        <form id="highlightForm" action="/process" method="post" enctype="multipart/form-data">
+          <!-- PDF Upload -->
+          <label for="pdf_file" class="upload-btn">
+            <i class="fas fa-file-pdf"></i> Select PDF File
+          </label>
+          <input type="file" id="pdf_file" name="pdf_file" accept="application/pdf" required>
+          <div id="pdfFileName" class="file-name"></div>
+
+          <br>
+
+          <!-- Excel Upload -->
+          <label for="excel_file" class="upload-btn" style="background:#e76f51;">
+            <i class="fas fa-file-excel"></i> Select Excel File
+          </label>
+          <input type="file" id="excel_file" name="excel_file" accept=".xlsx,.xls" required>
+          <div id="excelFileName" class="file-name"></div>
+
+          <!-- Mode Selection -->
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="mode" value="pf" checked> PF (Cell only)
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="mode" value="esic"> ESIC (Full row)
+            </label>
+          </div>
+
+          <!-- Process Button -->
+          <button type="submit" class="process-btn" id="processBtn">
+            <i class="fas fa-highlighter"></i> Process & Highlight
+          </button>
+        </form>
+
+        <!-- Status Display -->
+        <div class="status-container" id="statusContainer">
+          <div class="file-status" id="pdfStatus">
+            <i class="fas fa-file-pdf status-icon"></i>
+            <span>PDF file: Waiting for upload</span>
+            <div class="progress-bar">
+              <div class="progress" id="pdfProgress"></div>
+            </div>
+          </div>
+          
+          <div class="file-status" id="excelStatus">
+            <i class="fas fa-file-excel status-icon"></i>
+            <span>Excel file: Waiting for upload</span>
+            <div class="progress-bar">
+              <div class="progress" id="excelProgress"></div>
+            </div>
+          </div>
+          
+          <div class="file-status" id="processStatus">
+            <i class="fas fa-cogs status-icon"></i>
+            <span>Processing: Waiting to start</span>
+            <div class="progress-bar">
+              <div class="progress" id="processProgress"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result Display -->
+        <div class="result-container" id="resultContainer">
+          <div class="result-header">
+            <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+            Processing Complete!
+          </div>
+          <p>Your PDF has been successfully highlighted. You can now download the processed file.</p>
+          <a href="#" class="download-btn" id="downloadBtn">
+            <i class="fas fa-download"></i> Download Highlighted PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>We ❤️ Doc</h3>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/pricing">Pricing</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Tools</h3>
+          <ul class="footer-links">
+            <li><a href="/highlight">PDF Highlighter</a></li>
+            <li><a href="/merge-pdf">Merge PDF</a></li>
+            <li><a href="/split-pdf">Split PDF</a></li>
+            <li><a href="/all-tools">View All Tools</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Help & Support</h3>
+          <ul class="footer-links">
+            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/contact">Contact Support</a></li>
+            <li><a href="/privacy-policy">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2023 We ❤️ Doc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const pdfFileInput = document.getElementById('pdf_file');
+      const excelFileInput = document.getElementById('excel_file');
+      const pdfFileName = document.getElementById('pdfFileName');
+      const excelFileName = document.getElementById('excelFileName');
+      const pdfStatus = document.getElementById('pdfStatus');
+      const excelStatus = document.getElementById('excelStatus');
+      const processStatus = document.getElementById('processStatus');
+      const pdfProgress = document.getElementById('pdfProgress');
+      const excelProgress = document.getElementById('excelProgress');
+      const processProgress = document.getElementById('processProgress');
+      const processBtn = document.getElementById('processBtn');
+      const statusContainer = document.getElementById('statusContainer');
+      const resultContainer = document.getElementById('resultContainer');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const form = document.getElementById('highlightForm');
+      
+      // Handle PDF file selection
+      pdfFileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+          const file = this.files[0];
+          pdfFileName.textContent = `Selected: ${file.name}`;
+          updateStatus(pdfStatus, pdfProgress, 'success', `PDF file: ${file.name} (${formatFileSize(file.size)})`);
+        } else {
+          pdfFileName.textContent = '';
+          updateStatus(pdfStatus, pdfProgress, '', 'PDF file: Waiting for upload');
+        }
+        checkFilesReady();
+      });
+      
+      // Handle Excel file selection
+      excelFileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+          const file = this.files[0];
+          excelFileName.textContent = `Selected: ${file.name}`;
+          updateStatus(excelStatus, excelProgress, 'success', `Excel file: ${file.name} (${formatFileSize(file.size)})`);
+        } else {
+          excelFileName.textContent = '';
+          updateStatus(excelStatus, excelProgress, '', 'Excel file: Waiting for upload');
+        }
+        checkFilesReady();
+      });
+      
+      // Check if both files are ready
+      function checkFilesReady() {
+        if (pdfFileInput.files.length > 0 && excelFileInput.files.length > 0) {
+          processBtn.disabled = false;
+          updateStatus(processStatus, processProgress, '', 'Processing: Ready to start');
+        } else {
+          processBtn.disabled = true;
+          updateStatus(processStatus, processProgress, '', 'Processing: Waiting to start');
+        }
+      }
+      
+      // Update status display
+      function updateStatus(element, progress, status, message) {
+        element.className = 'file-status';
+        if (status) {
+          element.classList.add(status);
+        }
+        
+        const icon = element.querySelector('.status-icon');
+        icon.className = 'status-icon';
+        
+        if (status === 'success') {
+          icon.classList.add('fas', 'fa-check-circle');
+          progress.style.width = '100%';
+        } else if (status === 'error') {
+          icon.classList.add('fas', 'fa-times-circle');
+          progress.style.width = '100%';
+        } else if (status === 'processing') {
+          icon.classList.add('fas', 'fa-spinner', 'fa-spin');
+          progress.style.width = '50%';
+        } else {
+          icon.classList.add('fas');
+          if (element.id === 'pdfStatus') {
+            icon.classList.add('fa-file-pdf');
+          } else if (element.id === 'excelStatus') {
+            icon.classList.add('fa-file-excel');
+          } else {
+            icon.classList.add('fa-cogs');
+          }
+          progress.style.width = '0%';
+        }
+        
+        element.querySelector('span').textContent = message;
+      }
+      
+      // Format file size
+      function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+      
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Update status to processing
+        updateStatus(processStatus, processProgress, 'processing', 'Processing: Highlighting PDF...');
+        processBtn.disabled = true;
+        
+        // Create FormData object
+        const formData = new FormData();
+        formData.append('pdf_file', pdfFileInput.files[0]);
+        formData.append('excel_file', excelFileInput.files[0]);
+        formData.append('mode', document.querySelector('input[name="mode"]:checked').value);
+        
+        // Send AJAX request
+        fetch('/process', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.blob();
+          }
+          throw new Error('Processing failed');
+        })
+        .then(blob => {
+          // Update status to success
+          updateStatus(processStatus, processProgress, 'success', 'Processing: Complete!');
+          
+          // Show result container
+          resultContainer.style.display = 'block';
+          
+          // Create download link
+          const url = window.URL.createObjectURL(blob);
+          downloadBtn.href = url;
+          downloadBtn.download = 'highlighted_output.pdf';
+          
+          // Scroll to results
+          resultContainer.scrollIntoView({ behavior: 'smooth' });
+        })
+        .catch(error => {
+          // Update status to error
+          updateStatus(processStatus, processProgress, 'error', `Processing: Error - ${error.message}`);
+          processBtn.disabled = false;
+        });
+      });
+    });
+  </script>
+</body>
+</html>

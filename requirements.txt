@@ -1,6 +1,20 @@
 Flask==3.0.3
+Flask-SQLAlchemy==3.0.5
+Werkzeug==3.0.3
 gunicorn==21.2.0
+
+# PDF Handling
+PyMuPDF==1.23.9
+PyPDF2==3.0.1
+reportlab==4.0.4
+
+# Excel Handling
+openpyxl==3.1.2
 pandas==2.2.2
 numpy==1.26.4
-openpyxl==3.1.5
-SQLAlchemy==2.0.32
+
+# Images (sometimes needed for PDF/Excel preview)
+Pillow==10.3.0
+
+# Environment Variables
+python-dotenv==1.0.0

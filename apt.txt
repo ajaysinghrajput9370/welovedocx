@@ -1,0 +1,6 @@
+build-essential
+poppler-utils
+python3-dev
+libfreetype6-dev
+libjpeg-dev
+zlib1g-dev
